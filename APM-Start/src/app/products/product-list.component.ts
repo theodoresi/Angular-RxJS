@@ -1,41 +1,40 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
-import { Subscription } from 'rxjs';
-
+import { BehaviorSubject, combineLatest, EMPTY, forkJoin, Subject } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Product } from './product';
+
 import { ProductService } from './product.service';
+import { ProductCategoryService } from '../product-categories/product-category.service';
 
 @Component({
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.css']
+  styleUrls: ['./product-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent {
   pageTitle = 'Product List';
+  someProduct: Product = {} as Product;
   errorMessage = '';
-  categories;
+  selectedCategoryId = new BehaviorSubject<number>(0);
 
-  products: Product[] = [];
-  sub: Subscription;
+  categories$ = this.productCategoryService.productCategories$;
+  productsWithCategory$ = this.productService.productsWithCategory$;
 
-  constructor(private productService: ProductService) { }
+  filteredProductsWithCategory$ = combineLatest([this.productsWithCategory$, this.selectedCategoryId]).pipe(
+    map(([products, categoryId]) => categoryId ? products.filter((product) => product.categoryId === categoryId) : products)
+  );
 
-  ngOnInit(): void {
-    this.sub = this.productService.getProducts()
-      .subscribe(
-        products => this.products = products,
-        error => this.errorMessage = error
-      );
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
+  constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 
   onAdd(): void {
-    console.log('Not yet implemented');
+    this.productService.addNewProduct({
+      productName: 'My Product',
+      categoryId: 3
+    } as Product);
   }
 
   onSelected(categoryId: string): void {
-    console.log('Not yet implemented');
+    this.selectedCategoryId.next(+categoryId);
   }
 }

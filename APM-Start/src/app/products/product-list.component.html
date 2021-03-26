@@ -10,7 +10,7 @@
           <select class="form-control"
                   (change)="onSelected($event.target.value)">
             <option value="0">- Display All -</option>
-            <option *ngFor="let category of categories"
+            <option *ngFor="let category of categories$ | async as categories"
                     [value]="category.id">{{ category.name }}</option>
           </select>
         </div>
@@ -24,27 +24,32 @@
 
     <div class="table-responsive">
       <table class="table mb-0"
-             *ngIf="products">
+             *ngIf="filteredProductsWithCategory$ | async as products; else noProducts">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Product</th>
             <th>Code</th>
             <th>Category</th>
+            <th>Category Name</th>
             <th>Price</th>
             <th>In Stock</th>
           </tr>
         </thead>
         <tbody *ngFor="let product of products">
           <tr>
+            <td>{{ product.id }}</td>
             <td>{{ product.productName }}</td>
             <td>{{ product.productCode }}</td>
             <td>{{ product.categoryId }}</td>
+            <td>{{ product.categoryName }}</td>
             <td>{{ product.price | currency:"USD":"symbol":"1.2-2" }}</td>
             <td>{{ product.quantityInStock }}</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <ng-template #noProducts>There is no product</ng-template>
 
   </div>
 </div>

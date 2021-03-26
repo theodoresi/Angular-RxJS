@@ -49,7 +49,7 @@ export class ProductData {
       productCode: 'GMG-0042',
       description: 'Standard two-button video game controller',
       price: 35.95,
-      categoryId: 5,
+      categoryId: 4,
       quantityInStock: 12,
       supplierIds: [9, 10]
     }
