@@ -4,8 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ProductListComponent } from './product-list.component';
 import { ProductShellComponent } from './product-list-alt/product-shell.component';
-// import { ProductDetailComponent } from './product-detail/product-detail.component';
-import { ProductDetailComponent } from './product-list-alt/product-detail.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
+// import { ProductDetailComponent } from './product-list-alt/product-detail.component';
 
 import { SharedModule } from '../shared/shared.module';
 import { ProductListAltComponent } from './product-list-alt/product-list-alt.component';
@@ -15,10 +15,10 @@ import { ProductListAltComponent } from './product-list-alt/product-list-alt.com
     SharedModule,
     ReactiveFormsModule,
     RouterModule.forChild([
-      // {
-      //   path: 'product/:id',
-      //   component: ProductDetailComponent
-      // },
+      {
+        path: 'detail/:id',
+        component: ProductDetailComponent
+      },
       {
         path: '',
         component: ProductListComponent

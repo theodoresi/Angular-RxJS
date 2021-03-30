@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { mergeMap } from 'rxjs/operators';
+import { SupplierService } from 'src/app/suppliers/supplier.service';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'pm-product-detail',
@@ -7,14 +10,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./product-detail.component.css']
 })
 export class ProductDetailComponent implements OnInit {
-  productId: number;
+  product$ = this.route.params.pipe(
+    mergeMap((param) => this.productService.getProductById(param.id))
+  );
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private productService: ProductService, private supplierService: SupplierService) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe((param) => {
-      this.productId = param.id;
-    });
+    this.supplierService.suppliers$.subscribe();
   }
-
 }

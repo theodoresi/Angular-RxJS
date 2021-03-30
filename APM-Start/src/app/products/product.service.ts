@@ -58,6 +58,10 @@ export class ProductService {
     });
   }
 
+  getProductById(productId: number) {
+    return this.http.get<Product>(`${this.productsUrl}/${productId}`);
+  }
+
   constructor(
     private http: HttpClient,
     private supplierService: SupplierService,
