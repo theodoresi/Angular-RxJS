@@ -14,10 +14,10 @@ import { ProductCategoryService } from '../product-categories/product-category.s
 })
 export class ProductService {
   private productsUrl = 'api/products';
-  private suppliersUrl = this.supplierService.suppliersUrl;
   private httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    tap((data) => console.log('Products: ', JSON.stringify(data))),
+    tap((data) => console.log('Products$: ', JSON.stringify(data))),
     catchError(this.handleError)
   );
 

@@ -44,7 +44,7 @@
         <tbody>
           <tr *ngFor="let supplier of productSuppliers">
             <td>{{ supplier.name }} </td>
-            <td>{{ supplier.cost | currency:"USD":"symbol":"1.2-2" }}</td>
+            <td>{{ supplier.cost }}</td>
             <td>{{ supplier.minQuantity }}</td>
           </tr>
         </tbody>
