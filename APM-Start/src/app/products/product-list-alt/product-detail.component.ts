@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { ProductService } from '../product.service';
 
 @Component({
-  selector: 'pm-product-detail',
+  selector: 'pm-product-detail-alt',
   templateUrl: './product-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
