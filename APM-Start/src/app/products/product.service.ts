@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { Product } from './product';
 import { Supplier } from '../suppliers/supplier';
 import { SupplierService } from '../suppliers/supplier.service';
+import { ProductCategoryService } from '../product-categories/product-category.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +16,32 @@ export class ProductService {
   private productsUrl = 'api/products';
   private suppliersUrl = this.supplierService.suppliersUrl;
 
-  constructor(private http: HttpClient,
-              private supplierService: SupplierService) { }
+  private productSelectedSubject = new BehaviorSubject<number>(0);
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl)
-      .pipe(
-        tap(data => console.log('Products: ', JSON.stringify(data))),
-        catchError(this.handleError)
-      );
+  products$ = this.http.get<Product[]>(this.productsUrl).pipe(
+    tap((products) => console.log(`In products$ ${products}`))
+  );
+
+  productsWithCategories$ = combineLatest([this.products$, this.productCategoryService.productCategories$]).pipe(
+    map(([products, categories]) => products.map(
+      (product) => ({ ...product, categoryName: categories.find((c) => c.id === product.categoryId).name }) as Product
+    )),
+    tap((products) => console.log(`In productsWithCategories: ${products}`))
+  );
+
+  selectedProduct$ = combineLatest([this.productsWithCategories$, this.productSelectedSubject]).pipe(
+    map(([products, productId]) => products.find((product) => product.id === productId)),
+    tap((selectedProduct) => console.log(`In selectedProduct$ ${selectedProduct}`))
+  );
+
+  constructor(
+    private http: HttpClient,
+    private supplierService: SupplierService,
+    private productCategoryService: ProductCategoryService
+  ) { }
+
+  selectedProductChanged(productId: number): void {
+    this.productSelectedSubject.next(productId);
   }
 
   private fakeProduct(): Product {

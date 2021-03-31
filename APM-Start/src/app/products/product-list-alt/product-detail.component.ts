@@ -9,7 +9,7 @@ import { ProductService } from '../product.service';
 export class ProductDetailComponent {
   pageTitle = 'Product Detail';
   errorMessage = '';
-  product;
+  product$ = this.productService.selectedProduct$;
 
   constructor(private productService: ProductService) { }
 
