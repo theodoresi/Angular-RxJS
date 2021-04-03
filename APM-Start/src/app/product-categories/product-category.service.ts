@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { throwError, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { ProductCategory } from './product-category';
 
@@ -11,7 +12,7 @@ import { ProductCategory } from './product-category';
 export class ProductCategoryService {
   private productCategoriesUrl = 'api/productCategories';
   productCategories$ = this.http.get<ProductCategory[]>(this.productCategoriesUrl).pipe(
-    //tap((productCategories) => console.log(`In productCategories$ ${productCategories}`))
+    tap((productCategories) => console.log(`*** In productCategories$ ${productCategories}`))
   );
 
   constructor(private http: HttpClient) { }
@@ -32,7 +33,3 @@ export class ProductCategoryService {
     return throwError(errorMessage);
   }
 }
-function tap(arg0: (productCategories: any) => void): import("rxjs").OperatorFunction<ProductCategory[], unknown> {
-  throw new Error('Function not implemented.');
-}
-
