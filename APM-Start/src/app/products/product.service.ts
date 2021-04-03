@@ -17,13 +17,14 @@ export class ProductService {
   private httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    tap((data) => console.log('Products$: ', JSON.stringify(data))),
+    tap((data) => console.log('*** In products$: ', JSON.stringify(data))),
     catchError(this.handleError)
   );
 
   private newProductSubject = new Subject<Product>();
   productsWithNewProduct$ = merge(this.products$, this.newProductSubject).pipe(
-    scan((products: Product[], newProduct: Product) => [...products, newProduct])
+    scan((products: Product[], newProduct: Product) => [...products, newProduct]),
+    tap((products) => console.log(`*** In productsWithNewProducts$ ${products}`))
   );
 
   productsWithCategory$ = combineLatest([this.productsWithNewProduct$, this.productCategoryService.productCategories$]).pipe(
@@ -31,18 +32,18 @@ export class ProductService {
       products.map((product) => ({
         ...product,
         price: product.price * 100,
-        // 如果有product的categoryId不在所有的category里面，safe navigation operator ? 会保证不执行.name
         categoryName: categories.find((c) => c.id === product.categoryId)?.name || 'unknown'
       }) as Product)
     ),
-    catchError((err) => this.handleError(err))
+    catchError((err) => this.handleError(err)),
+    tap((data) => console.log('*** In productsWithCategory$: ', JSON.stringify(data))),
   );
 
   productSelectedSubject = new BehaviorSubject<number>(0);
 
   selectedProduct$ = combineLatest([this.productsWithCategory$, this.productSelectedSubject]).pipe(
     map(([products, productId]) => products.find((product) => product.id === productId)),
-    tap((product) => console.log('Selected product: ', product))
+    tap((product) => console.log(`*** In SelectedProduct$: ${product}`))
   );
 
   selectedProductChanged(productId): void {
@@ -58,7 +59,7 @@ export class ProductService {
     });
   }
 
-  getProductById(productId: number) {
+  getProductById(productId: number): Observable<Product> {
     return this.http.get<Product>(`${this.productsUrl}/${productId}`);
   }
 
