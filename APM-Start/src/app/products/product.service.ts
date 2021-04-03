@@ -24,7 +24,7 @@ export class ProductService {
   private newProductSubject = new Subject<Product>();
   productsWithNewProduct$ = merge(this.products$, this.newProductSubject).pipe(
     scan((products: Product[], newProduct: Product) => [...products, newProduct]),
-    tap((products) => console.log(`*** In productsWithNewProducts$ ${products}`))
+    tap((products) => console.log(`*** In productsWithNewProduct$ ${products}`))
   );
 
   productsWithCategory$ = combineLatest([this.productsWithNewProduct$, this.productCategoryService.productCategories$]).pipe(

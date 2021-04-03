@@ -1,4 +1,9 @@
 <div *ngIf="product$ | async as product">
-  <p>{{ product.id }} </p>
-  <p>{{ product.productName }}</p>
+  <p>ID: {{ product.id }} </p>
+  <p>Product Name: {{ product.productName }}</p>
+  <ul *ngIf="suppliers$ | async as suppliers">
+    <li *ngFor="let supplier of suppliers">
+      <p>Supplier: {{ supplier.name }}</p>
+    </li>
+  </ul>
 </div>

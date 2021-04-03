@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { throwError, Observable, of, concat } from 'rxjs';
-import { concatMap, mergeMap, tap } from 'rxjs/operators';
+import { throwError, Observable, of, concat, from } from 'rxjs';
+import { concatMap, mergeMap, tap, toArray } from 'rxjs/operators';
 import { Supplier } from './supplier';
 
 @Injectable({
@@ -13,10 +13,16 @@ export class SupplierService {
 
   constructor(private http: HttpClient) { }
 
-  suppliers$ = of(1, 5, 8).pipe(
-    mergeMap((supplierId) => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
-    tap((supplier: Supplier) => console.log(`${supplier.name} (${supplier.id})`))
-  );
+  getSuppliersByIds$(ids: number[]): Observable<Supplier[]> {
+    return from(ids).pipe(
+      // mergeMap takes a function whose return value is an Observable
+      // It then maps the result Observable to the value encapsulated in it, in this caase, Supplier
+      concatMap((supplierId) => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
+      // So for the next operator, the paramter is a Supplier
+      tap((supplier: Supplier) => console.log(`${supplier.name} (${supplier.id})`)),
+      toArray()
+    );
+  }
 
   private handleError(err: any): Observable<never> {
     // in a real world app, we may send the server to some remote logging infrastructure

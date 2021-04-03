@@ -33,25 +33,25 @@ export class ProductData {
       quantityInStock: 8,
       supplierIds: [5, 6]
     },
-    // {
-    //   id: 8,
-    //   productName: 'Saw',
-    //   productCode: 'TBX-0022',
-    //   description: '15-inch steel blade hand saw',
-    //   price: 11.55,
-    //   categoryId: 3,
-    //   quantityInStock: 6,
-    //   supplierIds: [7, 8]
-    // },
-    // {
-    //   id: 10,
-    //   productName: 'Video Game Controller',
-    //   productCode: 'GMG-0042',
-    //   description: 'Standard two-button video game controller',
-    //   price: 35.95,
-    //   categoryId: 4,
-    //   quantityInStock: 12,
-    //   supplierIds: [9, 10]
-    // }
+    {
+      id: 8,
+      productName: 'Saw',
+      productCode: 'TBX-0022',
+      description: '15-inch steel blade hand saw',
+      price: 11.55,
+      categoryId: 3,
+      quantityInStock: 6,
+      supplierIds: [7, 8]
+    },
+    {
+      id: 10,
+      productName: 'Video Game Controller',
+      productCode: 'GMG-0042',
+      description: 'Standard two-button video game controller',
+      price: 35.95,
+      categoryId: 4,
+      quantityInStock: 12,
+      supplierIds: [9, 10]
+    }
   ];
 }
