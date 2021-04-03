@@ -17,7 +17,7 @@ export class ProductService {
   private httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    tap((data) => console.log('*** In products$: ', JSON.stringify(data))),
+    tap((products) => console.log(`*** In products$: ${products}`)),
     catchError(this.handleError)
   );
 
@@ -36,11 +36,10 @@ export class ProductService {
       }) as Product)
     ),
     catchError((err) => this.handleError(err)),
-    tap((data) => console.log('*** In productsWithCategory$: ', JSON.stringify(data))),
+    tap((data) => console.log(`*** In productsWithCategory$: ${data}`)),
   );
 
   productSelectedSubject = new BehaviorSubject<number>(0);
-
   selectedProduct$ = combineLatest([this.productsWithCategory$, this.productSelectedSubject]).pipe(
     map(([products, productId]) => products.find((product) => product.id === productId)),
     tap((product) => console.log(`*** In SelectedProduct$: ${product}`))
@@ -60,7 +59,9 @@ export class ProductService {
   }
 
   getProductById(productId: number): Observable<Product> {
-    return this.http.get<Product>(`${this.productsUrl}/${productId}`);
+    return this.http.get<Product>(`${this.productsUrl}/${productId}`).pipe(
+      tap((product) => console.log(`*** In getProductById: ${product}`))
+    );
   }
 
   constructor(
