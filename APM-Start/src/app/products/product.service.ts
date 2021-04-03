@@ -19,19 +19,19 @@ export class ProductService {
   private productSelectedSubject = new BehaviorSubject<number>(0);
 
   products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    tap((products) => console.log(`In products$ ${products}`))
+    tap((products) => console.log(`*** In ProductService.products$ ${products}`))
   );
 
   productsWithCategories$ = combineLatest([this.products$, this.productCategoryService.productCategories$]).pipe(
     map(([products, categories]) => products.map(
       (product) => ({ ...product, categoryName: categories.find((c) => c.id === product.categoryId).name }) as Product
     )),
-    tap((products) => console.log(`In productsWithCategories: ${products}`))
+    tap((products) => console.log(`*** In ProductService.productsWithCategories: ${products}`))
   );
 
   selectedProduct$ = combineLatest([this.productsWithCategories$, this.productSelectedSubject]).pipe(
     map(([products, productId]) => products.find((product) => product.id === productId)),
-    tap((selectedProduct) => console.log(`In selectedProduct$ ${selectedProduct}`))
+    tap((selectedProduct) => console.log(`In ProductService.selectedProduct$ ${selectedProduct}`))
   );
 
   constructor(

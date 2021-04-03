@@ -12,7 +12,7 @@ import { ProductCategory } from './product-category';
 export class ProductCategoryService {
   private productCategoriesUrl = 'api/productCategories';
   productCategories$ = this.http.get<ProductCategory[]>(this.productCategoriesUrl).pipe(
-    tap((productCategories) => console.log(`*** In productCategories$ ${productCategories}`))
+    tap((productCategories) => console.log(`*** In ProductCategoryService.productCategories$ ${productCategories}`))
   );
 
   constructor(private http: HttpClient) { }

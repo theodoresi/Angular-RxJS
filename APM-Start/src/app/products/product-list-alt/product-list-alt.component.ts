@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs';
+import { timestamp } from 'rxjs/operators';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -12,7 +13,7 @@ import { ProductService } from '../product.service';
 export class ProductListAltComponent {
   pageTitle = 'Products';
   errorMessage = '';
-  selectedProductId: number;
+  selectedProduct$ = this.productService.selectedProduct$;
 
   products$ = this.productService.productsWithCategories$;
 
