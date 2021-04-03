@@ -37,4 +37,8 @@ export class ProductListComponent {
   onSelected(categoryId: string): void {
     this.selectedCategoryId.next(+categoryId);
   }
+
+  onProductSelected(product: Product): void {
+    this.productService.selectedProductChanged(product.id);
+  }
 }

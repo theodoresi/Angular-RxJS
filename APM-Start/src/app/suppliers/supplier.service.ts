@@ -13,11 +13,13 @@ export class SupplierService {
 
   constructor(private http: HttpClient) { }
 
+  suppliers$ = this.http.get<Supplier[]>(this.suppliersUrl);
+
   getSuppliersByIds$(ids: number[]): Observable<Supplier[]> {
     return from(ids).pipe(
       // mergeMap takes a function whose return value is an Observable
       // It then maps the result Observable to the value encapsulated in it, in this caase, Supplier
-      concatMap((supplierId) => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
+      mergeMap((supplierId) => this.http.get<Supplier>(`${this.suppliersUrl}/${supplierId}`)),
       // So for the next operator, the paramter is a Supplier
       tap((supplier: Supplier) => console.log(`${supplier.name} (${supplier.id})`)),
       toArray()

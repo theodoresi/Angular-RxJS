@@ -38,7 +38,7 @@
         </thead>
         <tbody *ngFor="let product of products">
           <tr>
-            <td>{{ product.id }}</td>
+            <td (click)="onProductSelected(product)">{{ product.id }}</td>
             <td>{{ product.productName }}</td>
             <td>{{ product.productCode }}</td>
             <td>{{ product.categoryId }}</td>
@@ -50,9 +50,10 @@
       </table>
     </div>
     <ng-template #noProducts>There is no product</ng-template>
-
   </div>
 </div>
+
+<pm-product-detail-alt></pm-product-detail-alt>
 
 <div class="alert alert-danger"
      *ngIf="errorMessage">

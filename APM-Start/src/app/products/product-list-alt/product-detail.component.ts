@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { EMPTY } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
+import { SupplierService } from 'src/app/suppliers/supplier.service';
 
 import { ProductService } from '../product.service';
 
@@ -19,8 +20,11 @@ export class ProductDetailComponent {
       return EMPTY;
     })
   );
-  productSuppliers = [];
 
-  constructor(private productService: ProductService) { }
+  productSuppliers$ = this.product$.pipe(
+    mergeMap((product) => this.supplierService.getSuppliersByIds$(product.supplierIds))
+  );
+
+  constructor(private productService: ProductService, private supplierService: SupplierService) { }
 
 }
