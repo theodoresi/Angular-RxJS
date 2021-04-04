@@ -14,7 +14,7 @@ import { ProductCategoryService } from '../product-categories/product-category.s
 })
 export class ProductListComponent {
   pageTitle = 'Product List';
-  errorMessage = '';
+  errorMessage = new Subject<string>();
   selectedCategoryId = new BehaviorSubject<number>(0);
 
   categories$ = this.productCategoryService.productCategories$;
@@ -24,6 +24,14 @@ export class ProductListComponent {
     map(([products, categoryId]) => categoryId ? products.filter((product) => product.categoryId === categoryId) : products),
     tap((products) => console.log(`In filteredProductsWithCategory$ ${products}`))
   );
+
+  vm$ = combineLatest([this.filteredProductsWithCategory$, this.categories$]).pipe(
+    map(([products, categories]) => ({ products, categories})),
+    catchError((err) => {
+      this.errorMessage.next('Error happened');
+      return EMPTY;
+    })
+  )
 
   constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 

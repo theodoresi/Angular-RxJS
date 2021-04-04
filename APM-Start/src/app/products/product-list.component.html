@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="vm$ | async as vm">
   <div class="card-header">
     {{pageTitle}}
   </div>
@@ -10,7 +10,7 @@
           <select class="form-control"
                   (change)="onSelected($event.target.value)">
             <option value="0">- Display All -</option>
-            <option *ngFor="let category of categories$ | async as categories"
+            <option *ngFor="let category of vm.categories"
                     [value]="category.id">{{ category.name }}</option>
           </select>
         </div>
@@ -24,7 +24,7 @@
 
     <div class="table-responsive">
       <table class="table mb-0"
-             *ngIf="filteredProductsWithCategory$ | async as products; else noProducts">
+             *ngIf="vm.products; else noProducts">
         <thead>
           <tr>
             <th>ID</th>
@@ -36,7 +36,7 @@
             <th>In Stock</th>
           </tr>
         </thead>
-        <tbody *ngFor="let product of products">
+        <tbody *ngFor="let product of vm.products">
           <tr>
             <td (click)="onProductSelected(product)">{{ product.id }}</td>
             <td>{{ product.productName }}</td>
@@ -56,6 +56,6 @@
 <pm-product-detail-alt></pm-product-detail-alt>
 
 <div class="alert alert-danger"
-     *ngIf="errorMessage">
+     *ngIf="errorMessage | async as errorMessage">
   {{ errorMessage }}
 </div>

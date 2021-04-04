@@ -25,12 +25,12 @@ export class ProductDetailComponent {
   )
 
   productSuppliers$ = this.product$.pipe(
+    filter((selectedProduct) => Boolean(selectedProduct)),
     // The "Just in time" approach
     switchMap((product) => this.supplierService.getSuppliersByIds$(product.supplierIds))
   );
 
   vm$ = combineLatest([this.product$, this.productSuppliers$, this.pageTitle$]).pipe(
-    filter((selectedProduct) => Boolean(selectedProduct)),
     map(([product, productSuppliers, pageTitle]) => ({ product, productSuppliers, pageTitle }))
   )
 
