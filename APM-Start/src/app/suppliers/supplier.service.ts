@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { throwError, Observable, of, concat, from } from 'rxjs';
-import { concatMap, mergeMap, tap, toArray } from 'rxjs/operators';
+import { concatMap, mergeMap, tap, toArray, shareReplay } from 'rxjs/operators';
 import { Supplier } from './supplier';
 
 @Injectable({
@@ -13,7 +13,10 @@ export class SupplierService {
 
   constructor(private http: HttpClient) { }
 
-  suppliers$ = this.http.get<Supplier[]>(this.suppliersUrl);
+  suppliers$ = this.http.get<Supplier[]>(this.suppliersUrl).pipe(
+    tap((suppliers) => console.log(`*** In suppliers$ ${suppliers}`)),
+    shareReplay(1)
+  );
 
   getSuppliersByIds$(ids: number[]): Observable<Supplier[]> {
     return from(ids).pipe(
@@ -43,3 +46,4 @@ export class SupplierService {
   }
 
 }
+

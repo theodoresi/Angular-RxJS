@@ -19,8 +19,9 @@ export class ProductDetailComponent implements OnInit {
     mergeMap((product) => this.supplierService.getSuppliersByIds$(product.supplierIds))
   );
 
+  // The "Get it all" approach
   productSuppliersAlt$ = combineLatest([this.product$, this.supplierService.suppliers$]).pipe(
-    map(([product, suppliers]) => suppliers.filter((supplier) => product.supplierIds.indexOf(supplier.id) !== -1))
+    map(([product, suppliers]) => suppliers.filter((supplier) => product.supplierIds.includes(supplier.id)))
   );
 
   constructor(private route: ActivatedRoute, private productService: ProductService, private supplierService: SupplierService) { }
