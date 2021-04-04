@@ -1,18 +1,18 @@
-<div *ngIf="product$ | async as product">
-  <p>ID: {{ product.id }}</p>
-  <p>Product Name: {{ product.productName }}</p>
-  <div *ngIf="productSuppliers$ | async as suppliers">
+<div *ngIf="vm$ | async as vm">
+  <p>ID: {{ vm.product.id }}</p>
+  <p>Product Name: {{ vm.product.productName }}</p>
+  <div>
     <div>Suppliers for the product</div>
     <ul>
-      <li *ngFor="let supplier of suppliers">
+      <li *ngFor="let supplier of vm.suppliers">
         <p>Supplier: {{ supplier.name }}</p>
       </li>
     </ul>
   </div>
-  <div *ngIf="productSuppliersAlt$ | async as suppliers">
+  <div>
     <div>Get suppliers for the product in another way</div>
     <ul>
-      <li *ngFor="let supplier of suppliers">
+      <li *ngFor="let supplier of vm.suppliersAlt">
         <p>Supplier: {{ supplier.name }}</p>
       </li>
     </ul>

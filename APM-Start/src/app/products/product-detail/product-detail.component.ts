@@ -24,6 +24,10 @@ export class ProductDetailComponent implements OnInit {
     map(([product, suppliers]) => suppliers.filter((supplier) => product.supplierIds.includes(supplier.id)))
   );
 
+  vm$ = combineLatest([this.product$, this.productSuppliers$, this.productSuppliersAlt$]).pipe(
+    map(([product, suppliers, suppliersAlt]) => ({ product, suppliers, suppliersAlt}))
+  )
+
   constructor(private route: ActivatedRoute, private productService: ProductService, private supplierService: SupplierService) { }
 
   ngOnInit(): void {

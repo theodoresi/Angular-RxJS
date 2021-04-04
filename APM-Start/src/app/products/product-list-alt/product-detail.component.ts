@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { EMPTY } from 'rxjs';
+import { combineLatest, EMPTY } from 'rxjs';
 import { catchError, filter, map, mergeMap, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { SupplierService } from 'src/app/suppliers/supplier.service';
 
@@ -25,10 +25,14 @@ export class ProductDetailComponent {
   )
 
   productSuppliers$ = this.product$.pipe(
-    filter((selectedProduct) => Boolean(selectedProduct)),
     // The "Just in time" approach
     switchMap((product) => this.supplierService.getSuppliersByIds$(product.supplierIds))
   );
+
+  vm$ = combineLatest([this.product$, this.productSuppliers$, this.pageTitle$]).pipe(
+    filter((selectedProduct) => Boolean(selectedProduct)),
+    map(([product, productSuppliers, pageTitle]) => ({ product, productSuppliers, pageTitle }))
+  )
 
   constructor(private productService: ProductService, private supplierService: SupplierService) { }
 
